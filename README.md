@@ -1,1 +1,1 @@
-## my neovim config collected from online
+## nvchad config
