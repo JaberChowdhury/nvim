@@ -104,10 +104,12 @@ return {
     {
         "b0o/incline.nvim",
         dependencies = {"craftzdog/solarized-osaka.nvim"},
+        -- dependencies = {"catppuccin/nvim",},
         event = "BufReadPre",
         priority = 1200,
         config = function()
             local colors = require("solarized-osaka.colors").setup()
+            -- local colors = require("catppuccin.colors").setup()
             require("incline").setup(
                 {
                     highlight = {
