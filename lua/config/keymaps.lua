@@ -1,76 +1,38 @@
-local discipline = require("craftzdog.discipline")
-
-discipline.cowboy()
-
 local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
 
--- Do things without affecting the registers
-keymap.set("n", "x", '"_x')
-keymap.set("n", "<Leader>p", '"0p')
-keymap.set("n", "<Leader>P", '"0P')
-keymap.set("v", "<Leader>p", '"0p')
-keymap.set("n", "<Leader>c", '"_c')
-keymap.set("n", "<Leader>C", '"_C')
-keymap.set("v", "<Leader>c", '"_c')
-keymap.set("v", "<Leader>C", '"_C')
-keymap.set("n", "<Leader>d", '"_d')
-keymap.set("n", "<Leader>D", '"_D')
-keymap.set("v", "<Leader>d", '"_d')
-keymap.set("v", "<Leader>D", '"_D')
+-- Save file
+keymap.set("n", "<C-s>", ":w<CR>", opts)
 
--- Increment/decrement
-keymap.set("n", "+", "<C-a>")
-keymap.set("n", "-", "<C-x>")
+-- Close buffer
+keymap.set("n", "<C-w>", ":bd<CR>", opts)
 
--- Delete a word backwards
-keymap.set("n", "dw", 'vb"_d')
+-- Find files
+keymap.set("n", "<C-p>", ":Telescope find_files<CR>", opts)
 
--- Select all
-keymap.set("n", "<C-a>", "gg<S-v>G")
+-- Find text in files
+keymap.set("n", "<C-f>", ":Telescope live_grep<CR>", opts)
 
--- Save with root permission (not working for now)
---vim.api.nvim_create_user_command('W', 'w !sudo tee > /dev/null %', {})
+-- Open terminal
+keymap.set("n", "<C-`>", ":split | term<CR>", opts)
 
--- Disable continuations
-keymap.set("n", "<Leader>o", "o<Esc>^Da", opts)
-keymap.set("n", "<Leader>O", "O<Esc>^Da", opts)
+-- Toggle file explorer
+keymap.set("n", "<C-b>", ":NvimTreeToggle<CR>", opts)
 
--- Jumplist
-keymap.set("n", "<C-m>", "<C-i>", opts)
+-- Move lines up and down
+keymap.set("n", "<A-Up>", ":m .-2<CR>==", opts)
+keymap.set("n", "<A-Down>", ":m .+1<CR>==", opts)
+keymap.set("i", "<A-Up>", "<Esc>:m .-2<CR>==gi", opts)
+keymap.set("i", "<A-Down>", "<Esc>:m .+1<CR>==gi", opts)
+keymap.set("v", "<A-Up>", ":m '<-2<CR>gv=gv", opts)
+keymap.set("v", "<A-Down>", ":m '>+1<CR>gv=gv", opts)
 
--- New tab
-keymap.set("n", "te", ":tabedit")
-keymap.set("n", "<tab>", ":tabnext<Return>", opts)
-keymap.set("n", "<s-tab>", ":tabprev<Return>", opts)
--- Split window
-keymap.set("n", "ss", ":split<Return>", opts)
-keymap.set("n", "sv", ":vsplit<Return>", opts)
--- Move window
-keymap.set("n", "sh", "<C-w>h")
-keymap.set("n", "sk", "<C-w>k")
-keymap.set("n", "sj", "<C-w>j")
-keymap.set("n", "sl", "<C-w>l")
+-- Split windows
+keymap.set("n", "<C-\\>", ":vsplit<CR>", opts)
+keymap.set("n", "<C-_>", ":split<CR>", opts)
 
--- Resize window
-keymap.set("n", "<C-w><left>", "<C-w><")
-keymap.set("n", "<C-w><right>", "<C-w>>")
-keymap.set("n", "<C-w><up>", "<C-w>+")
-keymap.set("n", "<C-w><down>", "<C-w>-")
-
--- Diagnostics
-keymap.set("n", "<C-j>", function()
-	vim.diagnostic.goto_next()
-end, opts)
-
-keymap.set("n", "<leader>r", function()
-	require("craftzdog.hsl").replaceHexWithHSL()
-end)
-
-keymap.set("n", "<leader>i", function()
-	require("craftzdog.lsp").toggleInlayHints()
-end)
-
-vim.api.nvim_create_user_command("ToggleAutoformat", function()
-	require("craftzdog.lsp").toggleAutoformat()
-end, {})
+-- Navigate between windows
+keymap.set("n", "<C-h>", "<C-w>h", opts)
+keymap.set("n", "<C-j>", "<C-w>j", opts)
+keymap.set("n", "<C-k>", "<C-w>k", opts)
+keymap.set("n", "<C-l>", "<C-w>l", opts)
