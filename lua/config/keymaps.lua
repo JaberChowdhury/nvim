@@ -33,6 +33,16 @@ keymap.set("n", "<C-_>", ":split<CR>", opts)
 
 -- Navigate between windows
 keymap.set("n", "<C-h>", "<C-w>h", opts)
-keymap.set("n", "<C-j>", "<C-w>j", opts)
 keymap.set("n", "<C-k>", "<C-w>k", opts)
 keymap.set("n", "<C-l>", "<C-w>l", opts)
+
+-- Cut text in normal mode
+keymap.set("n", "<C-x>", '"_d', opts)
+
+-- Cut text in visual mode
+keymap.set("v", "<C-x>", '"_d', opts)
+
+
+-- open terminal 
+keymap.set("n", "<C-j>", ":split | term pwsh<CR>", opts)
+keymap.set("v", "<C-j>", ":split | term pwsh<CR>", opts)
