@@ -1,4 +1,19 @@
 return {
+{
+		"williamboman/mason.nvim",
+		opts = function(_, opts)
+			vim.list_extend(opts.ensure_installed, {
+				"stylua",
+				"selene",
+				"luacheck",
+				"shellcheck",
+				"shfmt",
+			"tailwindcss-language-server",
+			"typescript-language-server",
+			"css-lsp",
+		})
+	end,
+},
   {
     "stevearc/conform.nvim",
     -- event = 'BufWritePre', -- uncomment for format on save
@@ -13,17 +28,17 @@ return {
     end,
   },
 
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = {
-        "vim",
-        "lua",
-        "vimdoc",
-        "html",
-        "css",
-        "cpp",
-      },
-    },
-  },
+  -- {
+  --   "nvim-treesitter/nvim-treesitter",
+  --   opts = {
+  --     ensure_installed = {
+  --       "vim",
+  --       "lua",
+  --       "vimdoc",
+  --       "html",
+  --       "css",
+  --       "cpp",
+  --     },
+  --   },
+  -- },
 }
