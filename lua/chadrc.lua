@@ -1,10 +1,11 @@
 local options = {
 
   base46 = {
+    theme = "catppuccin",
     hl_override = {},
     integrations = {},
     changed_themes = {},
-    transparency = false,
+    transparency = true,
     theme_toggle = { "onedark", "one_light" },
   },
 
@@ -21,15 +22,18 @@ local options = {
 
     -- telescope = { style = "borderless" }, -- borderless / bordered
     telescope = { style = "bordered" },
-
     statusline = {
       enabled = true,
       theme = "minimal", -- default/vscode/vscode_colored/minimal
-      -- default/round/block/arrow separators work only for default statusline theme
-      -- round and block will work for minimal theme only
       separator_style = "round",
-      order = nil,
-      modules = nil,
+      order = { "mode", "file", "file_size", "git", "%=", "lsp_msg", "%=", "lsp", "cwd" },
+      modules = {
+        file_size = function()
+          local x = require "lua.custom.configs.get_file_size"
+          local data = x.file_size()
+          return x.gen_block(data[1], data[2], "%#St_cwd_sep#", "%#St_cwd_bg#", "%#St_cwd_txt#")
+        end,
+      },
     },
 
     -- lazyload it when there are 1+ buffers
