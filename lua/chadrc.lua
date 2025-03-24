@@ -14,19 +14,20 @@ local options = {
       style = "default", -- default/flat_light/flat_dark/atom/atom_colored
       abbr_maxwidth = 60,
       format_colors = {
-        tailwind = false, -- will work for css lsp too
+        tailwind = true, -- will work for css lsp too
         icon = "󱓻",
       },
     },
 
-    telescope = { style = "borderless" }, -- borderless / bordered
+    -- telescope = { style = "borderless" }, -- borderless / bordered
+    telescope = { style = "bordered" },
 
     statusline = {
       enabled = true,
-    theme = "minimal", -- default/vscode/vscode_colored/minimal
+      theme = "minimal", -- default/vscode/vscode_colored/minimal
       -- default/round/block/arrow separators work only for default statusline theme
       -- round and block will work for minimal theme only
-      separator_style = "default",
+      separator_style = "round",
       order = nil,
       modules = nil,
     },
@@ -42,7 +43,7 @@ local options = {
   },
 
   nvdash = {
-    load_on_startup = false,
+    load_on_startup = true,
     header = {
       "                            ",
       "     ▄▄         ▄ ▄▄▄▄▄▄▄   ",
