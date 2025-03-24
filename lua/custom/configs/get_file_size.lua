@@ -31,7 +31,8 @@ M.file_size = function()
   end
 
   local size = vim.fn.getfsize(file_path)
-  return { "󰮆", M.format_size(size) }
+  local data = M.format_size(size)
+  return { "󰮆", data }
 end
 
 M.gen_block = function(icon, txt, sep_l_hlgroup, iconHl_group, txt_hl_group)
