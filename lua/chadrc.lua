@@ -26,7 +26,7 @@ local options = {
       enabled = true,
       theme = "minimal", -- default/vscode/vscode_colored/minimal
       separator_style = "round",
-      order = { "mode", "file", "file_size", "git", "%=", "lsp_msg", "%=", "lsp", "cwd","cursor" },
+      order = { "mode", "file", "file_size", "git", "%=", "lsp_msg", "%=", "lsp", "cwd", "cursor" },
       modules = {
         file_size = function()
           local x = require "lua.custom.configs.get_file_size"
