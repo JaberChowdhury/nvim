@@ -58,7 +58,7 @@ return {
       separators = {
         none = { "", "" },
         left = { "", " " },
-        right = { "", " " },
+        right = { " ", "" },
         center = { "  ", "  " },
         tab = { "", "" },
         breadcrumbs = "  ",
