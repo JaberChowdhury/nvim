@@ -1,17 +1,3 @@
-local conditions = {
-  buffer_not_empty = function()
-    return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
-  end,
-  hide_in_width = function()
-    return vim.fn.winwidth(0) > 80
-  end,
-  check_git_workspace = function()
-    local filepath = vim.fn.expand('%:p:h')
-    local gitdir = vim.fn.finddir('.git', filepath .. ';')
-    return gitdir and #gitdir > 0 and #gitdir < #filepath
-  end,
-}
-
 return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
@@ -20,7 +6,8 @@ return {
     },
     config = function()
         local lualine = require("lualine")
-        local theme = require("lualine.themes.gruvbox_dark")
+        -- local theme = require("lualine.themes.gruvbox_dark")
+        local theme = require("lualine.themes.iceberg")
 
         -- Make the entire statusline background transparent
         for _, mode in pairs({"normal", "insert", "visual", "replace", "command", "inactive"}) do
@@ -30,7 +17,7 @@ return {
         end
 
         local icons = {
-            mode = "",
+            mode = "",
             branch = "",
             diff = {added = " ", modified = "󰝤 ", removed = " "},
             diagnostics = {error = " ", warn = " ", info = " ", hint = "󰌵"},
@@ -46,36 +33,13 @@ return {
             windows = "",
             git = {
                 added = "",    -- Added files
-                changed = "",  -- Modified files
-                removed = ""   -- Removed files
+                changed = "",  -- Modified files
+                removed = "󰷦",   -- Removed files
+                staged = "󰰣",    -- Staged files
+                untracked = "󰡯", -- Untracked files
+                no_changes = " No Changes"
             }
         }
-
-        -- Function to display Git status
-        local function git_status()
-            local gitsigns = vim.b.gitsigns_status_dict
-            if not gitsigns then
-                return icons.git.added .. " No Git Status"
-            end
-
-            local parts = {}
-            if gitsigns.added and gitsigns.added > 0 then
-                table.insert(parts, string.format("%s %d", icons.git.added, gitsigns.added))
-            end
-            if gitsigns.changed and gitsigns.changed > 0 then
-                table.insert(parts, string.format("%s %d", icons.git.changed, gitsigns.changed))
-            end
-            if gitsigns.removed and gitsigns.removed > 0 then
-                table.insert(parts, string.format("%s %d", icons.git.removed, gitsigns.removed))
-            end
-
-            -- If no git changes, return a meaningful message
-            if #parts == 0 then
-                return icons.git.added .. " No Changes"
-            end
-
-            return table.concat(parts, " ")
-        end
 
         -- Function to display LSP status
         local function lsp_status()
@@ -108,7 +72,39 @@ return {
             return os.date("%H:%M:%S")
         end
 
-        -- Function to get colors dynamically based on part and mode
+        -- Function to display Git status (both staged and unstaged changes)
+        local function git_status()
+            local gitsigns = vim.b.gitsigns_status_dict
+            if not gitsigns then
+                return icons.git.no_changes
+            end
+
+            local parts = {}
+
+            -- Staged changes
+            if gitsigns.added and gitsigns.added > 0 then
+                table.insert(parts, string.format("%s %d ", icons.git.added, gitsigns.added))
+            end
+            if gitsigns.changed and gitsigns.changed > 0 then
+                table.insert(parts, string.format("%s %d ", icons.git.changed, gitsigns.changed))
+            end
+            if gitsigns.removed and gitsigns.removed > 0 then
+                table.insert(parts, string.format("%s %d ", icons.git.removed, gitsigns.removed))
+            end
+
+            -- Unstaged changes
+            if gitsigns.untracked and gitsigns.untracked > 0 then
+                table.insert(parts, string.format("%s %d ", icons.git.untracked, gitsigns.untracked))
+            end
+
+            if #parts == 0 then
+                return icons.git.no_changes
+            end
+
+            return table.concat(parts, " ")
+        end
+
+        -- Get colors dynamically based on part and mode
         local function color_part(mode, part)
             local style = theme[mode] and theme[mode][part]
             return style and {fg = style.fg, bg = style.bg} or nil
@@ -155,7 +151,7 @@ return {
                             "filesize",
                             icon = icons.filesize,
                             separator = {left = "", right = ""},
-                            color = color_part("command", "b")
+                            color = color_part("normal", "b")
                         },
                         {
                             "hostname",
@@ -169,10 +165,7 @@ return {
                             separator = {left = "", right = ""},
                             color = color_part("visual", "a")
                         },
-                        {
-                            "diff",
-                            cond = conditions.hide_in_width
-                        },
+                       
                         {
                             lsp_status,
                             separator = {left = "", right = ""},
