@@ -107,12 +107,6 @@ return {
 			})
 		end,
 	},
-
-	-- statusline
-	{
-			-- Removed lualine configuration
-	},
-
 	{
 		"folke/zen-mode.nvim",
 		cmd = "ZenMode",
