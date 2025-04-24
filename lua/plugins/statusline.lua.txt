@@ -1,0 +1,188 @@
+return {
+	"nvim-lualine/lualine.nvim",
+	event = "VeryLazy",
+	dependencies = {
+		"nvim-tree/nvim-web-devicons", -- Filetype icons
+	},
+	config = function()
+		local lualine = require("lualine")
+
+		local icons = {
+			mode = "",
+			branch = "",
+			diff = { added = " ", modified = "󰝤 ", removed = " " },
+			diagnostics = { error = " ", warn = " ", info = " ", hint = "󰌵" },
+			encoding = "",
+			fileformat = "",
+			filesize = "󱘲",
+			hostname = "󰒋",
+			location = "",
+			progress = "󰳾",
+			searchcount = "",
+			selectioncount = "󰈈",
+			lsp = "",
+			windows = "",
+		}
+
+		local function lsp_status()
+			local clients = vim.lsp.get_clients({ bufnr = 0 })
+			if #clients == 0 then
+				return icons.lsp .. " No LSP"
+			end
+			local names = {}
+			for _, client in ipairs(clients) do
+				table.insert(names, client.name)
+			end
+			return icons.lsp .. " " .. table.concat(names, ", ")
+		end
+
+		local function file_icon_filename()
+			local filename = vim.fn.expand("%:t")
+			if filename == "" then
+				return "[No Name]"
+			end
+			local ext = vim.fn.expand("%:e")
+			local icon, icon_hl = require("nvim-web-devicons").get_icon(filename, ext, { default = true })
+			local modified = vim.bo.modified and " ●" or ""
+			local readonly = vim.bo.readonly and " " or ""
+			return string.format("%%#%s#%s %%*%s%s", icon_hl or "", icon or "", filename, modified .. readonly)
+		end
+
+		local function current_time()
+			return os.date("%H:%M:%S")
+		end
+
+		lualine.setup({
+			options = {
+				icons_enabled = true,
+				theme = {
+					normal = {
+						a = { fg = "#ffffff", bg = "#3b4261", gui = "bold" },
+						b = { fg = "#ffffff", bg = "#3b4261" },
+						c = { fg = "#ffffff", bg = "none" },
+					},
+					inactive = {
+						a = { fg = "#aaaaaa", bg = "NONE" },
+						b = { fg = "#aaaaaa", bg = "NONE" },
+						c = { fg = "#aaaaaa", bg = "NONE" },
+					},
+				},
+				component_separators = { left = "", right = "" },
+				section_separators = { left = "", right = "" },
+				always_divide_middle = true,
+				globalstatus = true,
+			},
+			sections = {
+				lualine_a = {
+					{
+						"mode",
+						icon = icons.mode,
+						separator = { left = "", right = "" },
+						color = { fg = "#ffffff", bg = "#7aa2f7", gui = "bold" },
+					},
+					{
+						"branch",
+						icon = icons.branch,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#f7768e" },
+					},
+					{
+						"diff",
+						symbols = icons.diff,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#e0af68" },
+					},
+					{
+						"diagnostics",
+						sources = { "nvim_diagnostic" },
+						symbols = icons.diagnostics,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#9ece6a" },
+					},
+					{
+						"filesize",
+						icon = icons.filesize,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#7dcfff" },
+					},
+					{
+						"hostname",
+						icon = icons.hostname,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#c0caf5" },
+					},
+					{
+						"encoding",
+						icon = icons.encoding,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#ff9e64" },
+					},
+					{
+						lsp_status,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#f7768e" },
+					},
+				},
+				lualine_b = {},
+				lualine_c = {},
+				lualine_x = {
+					{
+						"searchcount",
+						icon = icons.searchcount,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#9ece6a" },
+					},
+					{
+						"selectioncount",
+						icon = icons.selectioncount,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#7aa2f7" },
+					},
+					{
+						"location",
+						icon = icons.location,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#e0af68" },
+					},
+					{
+						"progress",
+						icon = icons.progress,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#bb9af7" },
+					},
+					{
+						current_time,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#f7768e" },
+					},
+				},
+				lualine_y = {
+					{
+						"windows",
+						icon = icons.windows,
+						separator = { left = "", right = "" },
+						color = { fg = "#1a1b26", bg = "#73daca" },
+					},
+				},
+				lualine_z = {},
+			},
+			inactive_sections = {
+				lualine_a = {},
+				lualine_b = {},
+				lualine_c = {
+					{
+						file_icon_filename,
+						cond = function()
+							return vim.fn.empty(vim.fn.expand("%:t")) == 0
+						end,
+					},
+				},
+				lualine_x = {},
+				lualine_y = {},
+				lualine_z = {},
+			},
+			tabline = {},
+			extensions = {},
+		})
+	end,
+}
