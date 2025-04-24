@@ -12,6 +12,9 @@ return {
 				"tailwindcss-language-server",
 				"typescript-language-server",
 				"css-lsp",
+				"prettier", -- Formatter for JS, TS, CSS, TSX, JSX
+				"stylua",   -- Formatter for Lua
+				"clang-format", -- Formatter for C and C++
 			})
 		end,
 	},
@@ -45,6 +48,7 @@ return {
 								includeInlayFunctionLikeReturnTypeHints = true,
 								includeInlayEnumMemberValueHints = true,
 							},
+							format = { enable = true },
 						},
 						javascript = {
 							inlayHints = {
@@ -55,6 +59,7 @@ return {
 								includeInlayPropertyDeclarationTypeHints = true,
 								includeInlayFunctionLikeReturnTypeHints = true,
 								includeInlayEnumMemberValueHints = true,
+								format = { enable = true },
 							},
 						},
 					},
@@ -122,7 +127,7 @@ return {
 								unusedLocalExclude = { "_*" },
 							},
 							format = {
-								enable = false,
+								enable = true,
 								defaultConfig = {
 									indent_style = "space",
 									indent_size = "2",
@@ -132,6 +137,7 @@ return {
 						},
 					},
 				},
+				clangd = {}, -- For C and C++
 			},
 			setup = {},
 		},
@@ -150,6 +156,20 @@ return {
 					desc = "Goto Definition",
 					has = "definition",
 				},
+			})
+		end,
+	},
+	-- Formatter and Linter
+	{
+		"jose-elias-alvarez/null-ls.nvim",
+		opts = function(_, opts)
+			local null_ls = require("null-ls")
+			opts.sources = vim.list_extend(opts.sources, {
+				null_ls.builtins.formatting.prettier.with({
+					filetypes = { "javascript", "typescript", "css", "tsx", "jsx" },
+				}),
+				null_ls.builtins.formatting.stylua, -- Lua formatter
+				null_ls.builtins.formatting.clang_format, -- C/C++ formatter
 			})
 		end,
 	},
