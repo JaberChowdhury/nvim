@@ -78,3 +78,18 @@ end, {})
 -- Save file with Ctrl+S
 vim.keymap.set("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
 vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>a", { noremap = true, silent = true })
+
+local keymap = vim.keymap
+local opts = { noremap = true, silent = true }
+
+-- Toggle Neo-tree file explorer
+keymap.set("n", "<C-b>", ":Neotree toggle<CR>", opts)
+
+-- Toggle terminal
+keymap.set("n", "<C-j>", ":ToggleTerm<CR>", opts)
+
+-- Move lines up/down
+keymap.set("n", "<A-up>", ":m .-2<CR>==", opts)
+keymap.set("n", "<A-down>", ":m .+1<CR>==", opts)
+keymap.set("v", "<A-up>", ":m '<-2<CR>gv=gv", opts)
+keymap.set("v", "<A-down>", ":m '>+1<CR>gv=gv", opts)

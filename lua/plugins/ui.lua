@@ -56,11 +56,12 @@ return {
 		"rcarriga/nvim-notify",
 		opts = {
 			timeout = 5000,
+			render = "compact",
 		},
 	},
 
 	{
-		"snacks.nvim",
+		"folke/snacks.nvim",
 		opts = {
 			scroll = { enabled = false },
 		},
